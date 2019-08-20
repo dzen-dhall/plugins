@@ -52,6 +52,85 @@ A pack of XBM icons.
 
 ![Preview](icons/preview.png)
 
+<details><summary><strong>Show detailed previews</strong></summary>
+<p>
+
+
+| Name           | Preview                                                                     |
+|----------------|-----------------------------------------------------------------------------|
+| `ac_01`        | ![icons/previews/ac_01.xbm.png](icons/previews/ac_01.xbm.png)               |
+| `ac`           | ![icons/previews/ac.xbm.png](icons/previews/ac.xbm.png)                     |
+| `alert`        | ![icons/previews/alert.xbm.png](icons/previews/alert.xbm.png)               |
+| `arch_10x10`   | ![icons/previews/arch_10x10.xbm.png](icons/previews/arch_10x10.xbm.png)     |
+| `arch`         | ![icons/previews/arch.xbm.png](icons/previews/arch.xbm.png)                 |
+| `ball`         | ![icons/previews/ball.xbm.png](icons/previews/ball.xbm.png)                 |
+| `bat_empty_01` | ![icons/previews/bat_empty_01.xbm.png](icons/previews/bat_empty_01.xbm.png) |
+| `bat_empty_02` | ![icons/previews/bat_empty_02.xbm.png](icons/previews/bat_empty_02.xbm.png) |
+| `bat_full_01`  | ![icons/previews/bat_full_01.xbm.png](icons/previews/bat_full_01.xbm.png)   |
+| `bat_full_02`  | ![icons/previews/bat_full_02.xbm.png](icons/previews/bat_full_02.xbm.png)   |
+| `bat_low_01`   | ![icons/previews/bat_low_01.xbm.png](icons/previews/bat_low_01.xbm.png)     |
+| `bat_low_02`   | ![icons/previews/bat_low_02.xbm.png](icons/previews/bat_low_02.xbm.png)     |
+| `battery`      | ![icons/previews/battery.xbm.png](icons/previews/battery.xbm.png)           |
+| `bluetooth`    | ![icons/previews/bluetooth.xbm.png](icons/previews/bluetooth.xbm.png)       |
+| `bug_01`       | ![icons/previews/bug_01.xbm.png](icons/previews/bug_01.xbm.png)             |
+| `bug_02`       | ![icons/previews/bug_02.xbm.png](icons/previews/bug_02.xbm.png)             |
+| `cat`          | ![icons/previews/cat.xbm.png](icons/previews/cat.xbm.png)                   |
+| `clock`        | ![icons/previews/clock.xbm.png](icons/previews/clock.xbm.png)               |
+| `cpu`          | ![icons/previews/cpu.xbm.png](icons/previews/cpu.xbm.png)                   |
+| `dish`         | ![icons/previews/dish.xbm.png](icons/previews/dish.xbm.png)                 |
+| `diskette`     | ![icons/previews/diskette.xbm.png](icons/previews/diskette.xbm.png)         |
+| `empty`        | ![icons/previews/empty.xbm.png](icons/previews/empty.xbm.png)               |
+| `envelope`     | ![icons/previews/envelope.xbm.png](icons/previews/envelope.xbm.png)         |
+| `eye_l`        | ![icons/previews/eye_l.xbm.png](icons/previews/eye_l.xbm.png)               |
+| `eye_r`        | ![icons/previews/eye_r.xbm.png](icons/previews/eye_r.xbm.png)               |
+| `fox`          | ![icons/previews/fox.xbm.png](icons/previews/fox.xbm.png)                   |
+| `fs_01`        | ![icons/previews/fs_01.xbm.png](icons/previews/fs_01.xbm.png)               |
+| `fs_02`        | ![icons/previews/fs_02.xbm.png](icons/previews/fs_02.xbm.png)               |
+| `full`         | ![icons/previews/full.xbm.png](icons/previews/full.xbm.png)                 |
+| `fwd`          | ![icons/previews/fwd.xbm.png](icons/previews/fwd.xbm.png)                   |
+| `half`         | ![icons/previews/half.xbm.png](icons/previews/half.xbm.png)                 |
+| `info_01`      | ![icons/previews/info_01.xbm.png](icons/previews/info_01.xbm.png)           |
+| `info_02`      | ![icons/previews/info_02.xbm.png](icons/previews/info_02.xbm.png)           |
+| `info_03`      | ![icons/previews/info_03.xbm.png](icons/previews/info_03.xbm.png)           |
+| `mail`         | ![icons/previews/mail.xbm.png](icons/previews/mail.xbm.png)                 |
+| `mem`          | ![icons/previews/mem.xbm.png](icons/previews/mem.xbm.png)                   |
+| `mouse_01`     | ![icons/previews/mouse_01.xbm.png](icons/previews/mouse_01.xbm.png)         |
+| `music`        | ![icons/previews/music.xbm.png](icons/previews/music.xbm.png)               |
+| `net_down_01`  | ![icons/previews/net_down_01.xbm.png](icons/previews/net_down_01.xbm.png)   |
+| `net_down_02`  | ![icons/previews/net_down_02.xbm.png](icons/previews/net_down_02.xbm.png)   |
+| `net_down_03`  | ![icons/previews/net_down_03.xbm.png](icons/previews/net_down_03.xbm.png)   |
+| `net_up_01`    | ![icons/previews/net_up_01.xbm.png](icons/previews/net_up_01.xbm.png)       |
+| `net_up_02`    | ![icons/previews/net_up_02.xbm.png](icons/previews/net_up_02.xbm.png)       |
+| `net_up_03`    | ![icons/previews/net_up_03.xbm.png](icons/previews/net_up_03.xbm.png)       |
+| `net_wired`    | ![icons/previews/net_wired.xbm.png](icons/previews/net_wired.xbm.png)       |
+| `next`         | ![icons/previews/next.xbm.png](icons/previews/next.xbm.png)                 |
+| `note`         | ![icons/previews/note.xbm.png](icons/previews/note.xbm.png)                 |
+| `pacman`       | ![icons/previews/pacman.xbm.png](icons/previews/pacman.xbm.png)             |
+| `pause`        | ![icons/previews/pause.xbm.png](icons/previews/pause.xbm.png)               |
+| `phones`       | ![icons/previews/phones.xbm.png](icons/previews/phones.xbm.png)             |
+| `play`         | ![icons/previews/play.xbm.png](icons/previews/play.xbm.png)                 |
+| `plug`         | ![icons/previews/plug.xbm.png](icons/previews/plug.xbm.png)                 |
+| `prev`         | ![icons/previews/prev.xbm.png](icons/previews/prev.xbm.png)                 |
+| `rwd`          | ![icons/previews/rwd.xbm.png](icons/previews/rwd.xbm.png)                   |
+| `scorpio`      | ![icons/previews/scorpio.xbm.png](icons/previews/scorpio.xbm.png)           |
+| `shroom`       | ![icons/previews/shroom.xbm.png](icons/previews/shroom.xbm.png)             |
+| `spkr_01`      | ![icons/previews/spkr_01.xbm.png](icons/previews/spkr_01.xbm.png)           |
+| `spkr_02`      | ![icons/previews/spkr_02.xbm.png](icons/previews/spkr_02.xbm.png)           |
+| `spkr_03`      | ![icons/previews/spkr_03.xbm.png](icons/previews/spkr_03.xbm.png)           |
+| `stop`         | ![icons/previews/stop.xbm.png](icons/previews/stop.xbm.png)                 |
+| `temp`         | ![icons/previews/temp.xbm.png](icons/previews/temp.xbm.png)                 |
+| `test`         | ![icons/previews/test.xbm.png](icons/previews/test.xbm.png)                 |
+| `usb_02`       | ![icons/previews/usb_02.xbm.png](icons/previews/usb_02.xbm.png)             |
+| `usb`          | ![icons/previews/usb.xbm.png](icons/previews/usb.xbm.png)                   |
+| `volume`       | ![icons/previews/volume.xbm.png](icons/previews/volume.xbm.png)             |
+| `wifi_01`      | ![icons/previews/wifi_01.xbm.png](icons/previews/wifi_01.xbm.png)           |
+| `wifi_02`      | ![icons/previews/wifi_02.xbm.png](icons/previews/wifi_02.xbm.png)           |
+
+
+</p>
+</details>
+
+
 Run `dzen-dhall plug icons` to install.
 
 <details><summary><strong>Show usage</strong></summary>
