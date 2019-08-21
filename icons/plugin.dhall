@@ -1,6 +1,5 @@
-let lib = ../lib/index.dhall
-let types = ../src/types.dhall
-let utils = ../src/utils.dhall
+let types = ../types/package.dhall
+let utils = ../utils/package.dhall
 
 let Bar = types.Bar
 let Carrier = types.Carrier
