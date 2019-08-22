@@ -212,3 +212,35 @@ in	join
 
 </p>
 </details>
+
+## tomato
+
+![tomato](tomato/img/tomato.png)
+
+A digital tomato-timer to increase your productivity.
+
+Allows to set a countdown for some period of time, and run arbitrary shell command when the time is up.
+
+![waiting](tomato/img/waiting.png)
+
+![active](tomato/img/active.png)
+
+![ringing](tomato/img/ringing.png)
+
+
+Run `dzen-dhall plug tomato` to install.
+<details><summary><strong>Show usage</strong></summary>
+<p>
+
+```dhall
+let tomato = (./plugins/tomato.dhall).main
+
+in	plug
+  ( tomato
+	''
+	notify-desktop --urgency critical " *** Time is up! *** "
+	''
+  )
+```
+</p>
+</details>

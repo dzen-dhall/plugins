@@ -1,0 +1,12 @@
+env:
+  - TAG=v0.0.0 PATH=$HOME/:$PATH
+
+install:
+  - |
+    wget -O $HOME/dzen-dhall.tar.gz https://github.com/dzen-dhall/dzen-dhall/releases/download/$TAG/linux.tar.gz
+    tar -xvf $HOME/dzen-dhall.tar.gz -C $HOME/
+    chmod a+x $HOME/dzen-dhall
+
+script:
+  - |
+    ./test.sh
