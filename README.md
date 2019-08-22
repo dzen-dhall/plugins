@@ -1,5 +1,7 @@
 # dzen-dhall plugins
 
+[![Build Status](https://travis-ci.com/dzen-dhall/plugins.svg?branch=master)](https://travis-ci.com/dzen-dhall/plugins/)
+
 A set of curated plugins for [dzen-dhall](https://github.com/dzen-dhall/dzen-dhall).
 
 Follow [the instructions](https://github.com/dzen-dhall/dzen-dhall#installing-plugins) to install any of them.
