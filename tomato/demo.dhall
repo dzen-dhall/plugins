@@ -6,7 +6,7 @@ let utils = ./utils/package.dhall
 
 let Bar = types.Bar
 
-let BarSettings = types.BarSettings
+let Settings = types.Settings
 
 let Carrier = types.Carrier
 
@@ -16,7 +16,7 @@ let Plugin = types.Plugin
 
 let mkConfigs = utils.mkConfigs
 
-let defaultBarSettings : BarSettings = utils.defaultBarSettings
+let defaultSettings : Settings = utils.defaultSettings
 
 let bar
 	: Bar
@@ -33,4 +33,4 @@ let bar
 			  ''
 			)
 
-in  mkConfigs [ { bar = bar, settings = defaultBarSettings } ]
+in  mkConfigs [ { bar = bar, settings = defaultSettings } ]

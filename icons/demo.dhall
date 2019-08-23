@@ -7,7 +7,7 @@ let Plugin = types.Plugin
 
 let mkConfigs = utils.mkConfigs
 
-let defaultBar
+let bar
 	: Bar
 	=   λ(Bar : Type)
 	  → λ(carrier : Carrier Bar)
@@ -86,4 +86,4 @@ let defaultBar
 			, plug icons.wifi_02
 			]
 
-in  mkConfigs [ { bar = defaultBar, settings = utils.defaultBarSettings } ]
+in  mkConfigs [ { bar = bar, settings = utils.defaultSettings } ]

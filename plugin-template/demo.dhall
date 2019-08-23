@@ -17,8 +17,8 @@ let bar
 	  → λ(carrier : Carrier Bar)
 	  → let plug : Plugin → Bar = carrier.plug
 
-		let date = (./plugins/date.dhall).main
+		let plugin-template = (./plugins/plugin-template.dhall).main
 
-		in  plug (date "%d.%m.%Y %A - %H:%M:%S")
+		in  plug plugin-template : Bar
 
 in  mkConfigs [ { bar = bar, settings = defaultSettings } ]

@@ -9,4 +9,4 @@ install:
 
 script:
   - |
-    ./test.sh
+    CI=1 ./check.sh

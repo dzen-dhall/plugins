@@ -19,12 +19,8 @@ let main
 			  → λ(carrier : Carrier Bar)
 			  → carrier.join
 				[ carrier.check
-				  [ { message =
-						"`date` binary is required by `date` plugin."
-					, assertion =
-						Assertion.BinaryInPath "date"
-					}
-				  ]
+				  "`date` binary is required by `date` plugin."
+				  (Assertion.BinaryInPath "date")
 				, carrier.source
 				  { command =
 					  [ "date", "+${format}" ]

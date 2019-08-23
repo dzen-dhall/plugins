@@ -1,36 +1,51 @@
+let prelude = ../prelude/package.dhall
 let types = ../types/package.dhall
 let utils = ../utils/package.dhall
-let prelude = ../prelude/package.dhall
 
 let AbsolutePosition = types.AbsolutePosition
 let Address = types.Address
 let Assertion = types.Assertion
 let Bar = types.Bar
-let BarSettings = types.BarSettings
 let Button = types.Button
 let Carrier = types.Carrier
 let Check = types.Check
 let Color = types.Color
-let Configuration = types.Configuration
+let Direction = types.Direction
+let EscapeMode = types.EscapeMode
 let Event = types.Event
 let Hook = types.Hook
 let Image = types.Image
+let Marquee = types.Marquee
+let Padding = types.Padding
 let Plugin = types.Plugin
+let Position = types.Position
+let Shell = types.Shell
+let Slider = types.Slider
 let Source = types.Source
 let State = types.State
 let StateMap = types.StateMap
-let StateTransitionTable = types.StateTransitionTable
 let Transition = types.Transition
 let Variable = types.Variable
+let VerticalDirection = types.VerticalDirection
 
-let mkState = utils.mkState
-let mkAddress = utils.mkAddress
-let showState = utils.showState
+let showAddress : Address → Text = utils.showAddress
+let showButton : Button → Text = utils.showButton
+let showEvent : Event → Text = utils.showEvent
+let showState : State → Text = utils.showState
+let showVariable : Variable → Text = utils.showVariable
 
-let emit = utils.emit
-let get = utils.get
-let set = utils.set
-let query = utils.query
+let mkAddress : Text → Address = utils.mkAddress
+let mkBashHook : Shell → Hook = utils.mkBashHook
+let mkEvent : Text → Event = utils.mkEvent
+let mkState : Text → State = utils.mkState
+let mkTransition : Event → State → State → Transition = utils.mkTransition
+let mkTransitions : Event → List State → State → Transition = utils.mkTransitions
+let mkVariable : Text → Variable = utils.mkVariable
+
+let emit : Event → Shell = utils.emit
+let get : Variable → Shell = utils.get
+let query : Address → Shell = utils.query
+let set : Variable → Text → Shell = utils.set
 
 let INACTIVE : State = mkState ""
 let WAITING : State = mkState "WAITING"
@@ -39,13 +54,13 @@ let RINGING : State = mkState "RINGING"
 
 let AutomatonAddress : Address = mkAddress "AUTOMATO"
 
-let TomatoClicked = Event.Custom "TomatoClicked"
-let OkClicked = Event.Custom "OkClicked"
-let ResetClicked = Event.Custom "ResetClicked"
-let TimeIsUp = Event.Custom "TimeIsUp"
+let TomatoClicked = mkEvent "TomatoClicked"
+let OkClicked = mkEvent "OkClicked"
+let ResetClicked = mkEvent "ResetClicked"
+let TimeIsUp = mkEvent "TimeIsUp"
 
-let Minutes : Variable = "Seconds"
-let Seconds : Variable = "Minutes"
+let Minutes : Variable = mkVariable "Seconds"
+let Seconds : Variable = mkVariable "Minutes"
 
 let bitmap
 	: Image
@@ -58,37 +73,22 @@ let bitmap
 	   0xc0, 0x07, 0x00, 0x00, 0x00, 0x00 };
 	  ''
 
-let mkTransition
-	: Event → State → State → Text → Transition
-	=   λ(event : Event)
-	  → λ(from : State)
-	  → λ(to : State)
-	  → λ(script : Text)
-	  → { hooks =
-			[ { command = [ "bash" ], input = script } ] : List Hook
-		, events =
-			[ event ]
-		, from =
-			[ from ]
-		, to =
-			to
-		}
-
 let stt
-	: StateTransitionTable
-	= [ mkTransition TomatoClicked INACTIVE WAITING ""
-	  , mkTransition OkClicked WAITING ACTIVE ""
-	  , mkTransition
-		ResetClicked
-		WAITING
-		INACTIVE
-		''
-		${set Minutes "0"}
-		${set Seconds "0"}
-		''
-	  , mkTransition TimeIsUp ACTIVE RINGING ""
-	  , mkTransition TomatoClicked ACTIVE WAITING ""
-	  , mkTransition TomatoClicked RINGING INACTIVE ""
+	: List Transition
+	= [ mkTransition TomatoClicked INACTIVE WAITING
+	  , mkTransition OkClicked WAITING ACTIVE
+	  ,   mkTransition ResetClicked WAITING INACTIVE
+		⫽ { hooks =
+			  [ mkBashHook
+				''
+				${set Minutes "0"}
+				${set Seconds "0"}
+				''
+			  ]
+		  }
+	  , mkTransition TimeIsUp ACTIVE RINGING
+	  , mkTransition TomatoClicked ACTIVE WAITING
+	  , mkTransition TomatoClicked RINGING INACTIVE
 	  ]
 
 let mkIncreaseIntervalMinutes

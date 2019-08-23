@@ -6,6 +6,24 @@ A curated set of plugins for [dzen-dhall](https://github.com/dzen-dhall/dzen-dha
 
 You are welcome to contribute yours via pull requests. The advantage of doing so is that your plugins will be updated by maintainer(s) in case of a breaking API change, and other users will be able to easily discover your code.
 
+# Plugin development
+
+A step-by-step guide:
+
+0. [Install `dzen-dhall`](https://github.com/dzen-dhall/dzen-dhall#installing).
+
+1. Clone this repo.
+
+2. Choose a name for your plugin and run `./new.sh` passing that name as argument.
+
+3. Run `./check.sh your-plugin-name run` to make sure that everything is OK.
+
+4. Write your implementation, rechecking correctness during the process using [`./check.sh`](./check.sh). Make sure that your plugin satisfies the [requirements](#requirements).
+
+5. Add a section to the plugin catalogue below.
+
+6. Open a pull request.
+
 # Requirements
 
 To be merged into this repo, a plugin must fulfill these requirements:
@@ -15,10 +33,8 @@ To be merged into this repo, a plugin must fulfill these requirements:
 - Plugin code should be human-readable.
 - If a plugin emits events or contains automata, it should be wrapped in a separate [`scope`](https://github.com/dzen-dhall/dzen-dhall#scopes).
 - If a plugin calls binaries, it should check if they are present in `PATH` using [assertions](https://github.com/dzen-dhall/dzen-dhall#assertions). If it depends on particular versions of the binaries, it should contain a `SuccessfulExit` assertion where version checks should be performed.
-- New plugin directory should contain a `demo.dhall` file with a complete configuration that uses the newly created plugin as described in its `usage` section.
+- Plugin directory should contain a `demo.dhall` file with a complete configuration that uses the newly created plugin as described in its `usage` section.
 - A new entry to the [catalogue](#catalogue) should be added.
-
-Use `./test.sh` to check some of these requirements automatically.
 
 # Recommendations
 
@@ -215,6 +231,10 @@ in	join
 
 </p>
 </details>
+
+## plugin-template
+
+A template for new plugins. See [plugin development section](#plugin-development) of the README.
 
 ## tomato
 
