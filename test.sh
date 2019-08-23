@@ -14,7 +14,7 @@ function error {
 for dir in ./*/; do
 
     tmpDir=`mktemp -d`
-    configDir="$tmpDir/configs"
+    configDir="$tmpDir/config"
     pluginFile="$dir""plugin.dhall"
     demoFile="$dir""demo.dhall"
     pluginName=`echo "$dir" | awk '{split($0,a,"/"); print a[2]}'`
@@ -37,15 +37,28 @@ for dir in ./*/; do
 
     dzen-dhall --config-dir "$configDir" init &>/dev/null
     dzen-dhall --config-dir "$configDir" plug --yes "$dir/plugin.dhall"
-    cp "$demoFile" "$configDir/plugins/"
+    cp "$demoFile" "$configDir/config.dhall"
     dzen-dhall --config-dir "$configDir" validate
+
+    # Check that the plugin does not contain URL imports.
+    # However, we do not want to ban URLs in comments and strings.
+    # So we just replace all URLs with garbage and check if `dzen-dhall` complains.
+    # If it does, then it's certainly because of URL imports in dhall: we
+    # don't even reach the stage when string contents start matter when running
+    # `dzen-dhall validate`.
+
+    sed -i -e 's!http[s]\?://[a-zA-Z0-9]*!!g' "$configDir/plugins/$pluginName.dhall"
+    sed -i -e 's!http[s]\?://[a-zA-Z0-9]*!!g' "$configDir/config.dhall"
+
+    dzen-dhall --config-dir "$configDir" validate &>/dev/null ||
+        (echo "Plugin $pluginName contains URL imports!" && exit 1);
 
     if [[ "" == `cat ./README.md | grep "## $pluginName"` ]]; then
         error "No README section found for plugin $pluginName."
     fi;
 
     if [[ "" == `cat ./README.md | grep "dzen-dhall plug $pluginName"` ]]; then
-        error "No installation instructions found in README for plugin $pluginName. Please put \`dzen-dhall plug $pluginName\` to README.md"
+        error "No installation instructions found in README for plugin $pluginName. Please put \"Run \`dzen-dhall plug $pluginName\` to install\" to the appropriate section of README.md"
     fi;
 done;
 

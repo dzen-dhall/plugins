@@ -15,7 +15,10 @@ To be merged into this repo, a plugin must fulfill these requirements:
 - Plugin code should be human-readable.
 - If a plugin emits events or contains automata, it should be wrapped in a separate [`scope`](https://github.com/dzen-dhall/dzen-dhall#scopes).
 - If a plugin calls binaries, it should check if they are present in `PATH` using [assertions](https://github.com/dzen-dhall/dzen-dhall#assertions). If it depends on particular versions of the binaries, it should contain a `SuccessfulExit` assertion where version checks should be performed.
-- `description` should not contain distribution-specific instructions for installing depndencies, e.g. "run `apt-get install foo`" is bad, "Install `foo` using you package manager" is good.
+- New plugin directory should contain a `demo.dhall` file with a complete configuration that uses the newly created plugin as described in its `usage` section.
+- A new entry to the [catalogue](#catalogue) should be added.
+
+Use `./test.sh` to check some of these requirements automatically.
 
 # Recommendations
 

@@ -28,7 +28,6 @@ let bar
 
 		in  plug
 			( tomato
-			  [ 1, 5, 15, 30, 60 ]
 			  ''
 			  notify-desktop --urgency critical " *** Time is up! *** "
 			  ''
