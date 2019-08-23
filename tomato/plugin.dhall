@@ -1,85 +1,55 @@
 let types = ../types/package.dhall
-
 let utils = ../utils/package.dhall
-
 let prelude = ../prelude/package.dhall
 
 let AbsolutePosition = types.AbsolutePosition
-
 let Address = types.Address
-
 let Assertion = types.Assertion
-
 let Bar = types.Bar
-
 let BarSettings = types.BarSettings
-
 let Button = types.Button
-
 let Carrier = types.Carrier
-
 let Check = types.Check
-
 let Color = types.Color
-
 let Configuration = types.Configuration
-
 let Event = types.Event
-
 let Hook = types.Hook
-
 let Image = types.Image
-
 let Plugin = types.Plugin
-
-let Slot = types.Slot
-
 let Source = types.Source
-
 let State = types.State
-
 let StateMap = types.StateMap
-
 let StateTransitionTable = types.StateTransitionTable
-
 let Transition = types.Transition
-
 let Variable = types.Variable
 
+let mkState = utils.mkState
+let mkAddress = utils.mkAddress
+let showState = utils.showState
+
 let emit = utils.emit
-
 let get = utils.get
-
 let set = utils.set
+let query = utils.query
 
-let getState = utils.getState
+let INACTIVE : State = mkState ""
+let WAITING : State = mkState "WAITING"
+let ACTIVE : State = mkState "ACTIVE"
+let RINGING : State = mkState "RINGING"
 
-let TOMATO_SLOT : Slot = "TOMATO_SLOT"
-
-let INACTIVE : State = ""
-
-let WAITING : State = "WAITING"
-
-let ACTIVE : State = "ACTIVE"
-
-let RINGING : State = "RINGING"
-
-let AutomatonAddress = "AUTOMATO"
+let AutomatonAddress : Address = mkAddress "AUTOMATO"
 
 let TomatoClicked = Event.Custom "TomatoClicked"
-
 let OkClicked = Event.Custom "OkClicked"
-
 let ResetClicked = Event.Custom "ResetClicked"
-
 let TimeIsUp = Event.Custom "TimeIsUp"
 
 let Minutes : Variable = "Seconds"
-
 let Seconds : Variable = "Minutes"
 
-let bitmap : Image =
-	  ''
+let bitmap
+	: Image
+	= ''
 	  #define tomato_width 15
 	  #define tomato_height 15
 	  static unsigned char tomato_bits[] = {
@@ -94,9 +64,7 @@ let mkTransition
 	  → λ(from : State)
 	  → λ(to : State)
 	  → λ(script : Text)
-	  → { slots =
-			[ TOMATO_SLOT ]
-		, hooks =
+	  → { hooks =
 			[ { command = [ "bash" ], input = script } ] : List Hook
 		, events =
 			[ event ]
@@ -115,8 +83,8 @@ let stt
 		WAITING
 		INACTIVE
 		''
-		$SET Minutes "0"
-		$SET Seconds "0"
+		${set Minutes "0"}
+		${set Seconds "0"}
 		''
 	  , mkTransition TimeIsUp ACTIVE RINGING ""
 	  , mkTransition TomatoClicked ACTIVE WAITING ""
@@ -126,22 +94,22 @@ let stt
 let mkIncreaseIntervalMinutes
 	: ∀(Bar : Type) → Carrier Bar → Natural → Bar
 	=   λ(Bar : Type)
-	  → λ(carrier : Carrier Bar)
+	  → λ(cr : Carrier Bar)
 	  → λ(timeInterval : Natural)
-	  → carrier.ca
+	  → cr.ca
 		Button.Left
 		''
 		minutes=${get Minutes}
 		${set Minutes "\$(( minutes + ${Natural/show timeInterval} ))"}
 		''
-		(carrier.text "+${Natural/show timeInterval}m ")
+		(cr.text "+${Natural/show timeInterval}m ")
 
 let mkIncreaseIntervalSeconds
 	: ∀(Bar : Type) → Carrier Bar → Natural → Bar
 	=   λ(Bar : Type)
-	  → λ(carrier : Carrier Bar)
+	  → λ(cr : Carrier Bar)
 	  → λ(timeInterval : Natural)
-	  → carrier.ca
+	  → cr.ca
 		Button.Left
 		''
 		seconds=${get Seconds}
@@ -150,44 +118,44 @@ let mkIncreaseIntervalSeconds
 		   ${set Seconds "\$seconds"}
 		fi;
 		''
-		(carrier.text "+${Natural/show timeInterval}s ")
+		(cr.text "+${Natural/show timeInterval}s ")
 
 let tomatoSourceScript =
-      ''
-      minutes=${get Minutes}
-      seconds=${get Seconds}
-      state=${getState AutomatonAddress}
-      if [[ "$state" == ${ACTIVE} ]]; then
-        if [[ seconds -eq 0 ]]; then
-          if [[ minutes -eq 0 ]]; then
-            ${emit TOMATO_SLOT TimeIsUp};
-          else
-            seconds=59
-            ${set Seconds "$seconds"}
-            minutes="$(( minutes - 1 ))"
-            ${set Minutes "$minutes"};
-          fi;
-        else
-          seconds="$(( seconds - 1 ))"
-          ${set Seconds "$seconds"}
-        fi;
-      fi;
-      if [[ minutes -lt 10 ]]; then minutes="0$minutes"; fi
-      if [[ seconds -lt 10 ]]; then seconds="0$seconds"; fi
-      echo "$minutes:$seconds"
-      ''
+	  ''
+	  minutes=${get Minutes}
+	  seconds=${get Seconds}
+	  state=${query AutomatonAddress}
+	  if [[ "$state" == ${showState ACTIVE} ]]; then
+		if [[ seconds -eq 0 ]]; then
+			if [[ minutes -eq 0 ]]; then
+				${emit TimeIsUp};
+			else
+				seconds=59
+				${set Seconds "\$seconds"}
+				minutes="$(( minutes - 1 ))"
+				${set Minutes "\$minutes"};
+			fi;
+		else
+			seconds="$(( seconds - 1 ))"
+			${set Seconds "\$seconds"}
+		fi;
+	  fi;
+	  if [[ minutes -lt 10 ]]; then minutes="0$minutes"; fi
+	  if [[ seconds -lt 10 ]]; then seconds="0$seconds"; fi
+	  echo "$minutes:$seconds"
+	  ''
 
-let mkTomatoClocks =
+let mkActiveTomato =
 		λ(Bar : Type)
-	  → λ(carrier : Carrier Bar)
-	  → carrier.fg "white" (utils.mkBash Bar carrier 1000 tomatoSourceScript)
+	  → λ(cr : Carrier Bar)
+	  → cr.fg "white" (utils.mkBash Bar cr 1000 tomatoSourceScript)
 
 let mkWaitingTomato
 	: ∀(Bar : Type) → Carrier Bar → Bar
 	=   λ(Bar : Type)
 	  → λ(cr : Carrier Bar)
 	  → cr.join
-		[ mkTomatoClocks Bar cr
+		[ mkActiveTomato Bar cr
 		, cr.text " "
 		, cr.fg
 		  "#BDF"
@@ -210,28 +178,22 @@ let mkWaitingTomato
 			)
 		  )
 		, cr.text " "
-		, cr.ca
-		  Button.Left
-		  (emit TOMATO_SLOT OkClicked)
-		  (cr.fg "green" (cr.text "OK"))
+		, cr.ca Button.Left (emit OkClicked) (cr.fg "green" (cr.text "OK"))
 		, cr.text " "
-		, cr.ca
-		  Button.Left
-		  (emit TOMATO_SLOT ResetClicked)
-		  (cr.fg "red" (cr.text "RESET"))
+		, cr.ca Button.Left (emit ResetClicked) (cr.fg "red" (cr.text "RESET"))
 		]
 
 let mkRingingTomato =
 		λ(Bar : Type)
-	  → λ(carrier : Carrier Bar)
-	  → carrier.fg
+	  → λ(cr : Carrier Bar)
+	  → cr.fg
 		"black"
-		( carrier.bg
+		( cr.bg
 		  "red"
-		  ( carrier.ca
+		  ( cr.ca
 			Button.Left
-			(emit TOMATO_SLOT TomatoClicked)
-			(carrier.text " TIME IS UP ")
+			(emit TomatoClicked)
+			(cr.text " TIME IS UP ")
 		  )
 		)
 
@@ -239,21 +201,19 @@ let mkTomato
 	: Text → Bar
 	=   λ(command : Text)
 	  → λ(Bar : Type)
-	  → λ(carrier : Carrier Bar)
+	  → λ(cr : Carrier Bar)
 	  → let stateMap
 			: StateMap Bar
-			= [ { state = INACTIVE, bar = carrier.text "" }
-			  , { state = WAITING, bar = mkWaitingTomato Bar carrier }
-			  , { state = ACTIVE, bar = mkTomatoClocks Bar carrier }
-			  , { state = RINGING, bar = mkRingingTomato Bar carrier }
+			= [ { state = INACTIVE, bar = cr.text "" }
+			  , { state = WAITING, bar = mkWaitingTomato Bar cr }
+			  , { state = ACTIVE, bar = mkActiveTomato Bar cr }
+			  , { state = RINGING, bar = mkRingingTomato Bar cr }
 			  ]
 
-		let finalizer =
-			  carrier.automaton
-			  "FINALIZER"
-			  [ { slots =
-					[ TOMATO_SLOT ]
-				, hooks =
+		let bell =
+			  cr.automaton
+			  (mkAddress "BELL")
+			  [ { hooks =
 					[ { command = [ "bash" ], input = command } ]
 				, events =
 					[ TimeIsUp ]
@@ -265,17 +225,19 @@ let mkTomato
 			  ]
 			  ([] : StateMap Bar)
 
-		in  carrier.join
-			[ carrier.define Minutes "0"
-			, carrier.define Seconds "0"
-			, carrier.ca
-			  Button.Left
-			  (emit TOMATO_SLOT TomatoClicked)
-			  (carrier.fg "red" (carrier.i bitmap))
-			, carrier.text " "
-			, carrier.automaton AutomatonAddress stt stateMap
-			, finalizer
-			]
+		in  cr.scope
+			( cr.join
+			  [ cr.define Minutes "0"
+			  , cr.define Seconds "0"
+			  , cr.ca
+				Button.Left
+				(emit TomatoClicked)
+				(cr.fg "red" (cr.i bitmap))
+			  , cr.text " "
+			  , cr.automaton AutomatonAddress stt stateMap
+			  , bell
+			  ]
+			)
 
 in  { meta =
 		{ name =
@@ -309,6 +271,5 @@ in  { meta =
 			1
 		}
 	, main =
-		  λ(command : Text)
-		→ utils.mkPlugin (mkTomato command)
+		λ(command : Text) → utils.mkPlugin (mkTomato command)
 	}

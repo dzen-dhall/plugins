@@ -2,9 +2,7 @@
 
 [![Build Status](https://travis-ci.com/dzen-dhall/plugins.svg?branch=master)](https://travis-ci.com/dzen-dhall/plugins/)
 
-A set of curated plugins for [dzen-dhall](https://github.com/dzen-dhall/dzen-dhall).
-
-Follow [the instructions](https://github.com/dzen-dhall/dzen-dhall#installing-plugins) to install any of them.
+A curated set of plugins for [dzen-dhall](https://github.com/dzen-dhall/dzen-dhall).
 
 You are welcome to contribute yours via pull requests. The advantage of doing so is that your plugins will be updated by maintainer(s) in case of a breaking API change, and other users will be able to easily discover your code.
 
@@ -19,7 +17,7 @@ To be merged into this repo, a plugin must fulfill these requirements:
 - If a plugin calls binaries, it should check if they are present in `PATH` using [assertions](https://github.com/dzen-dhall/dzen-dhall#assertions). If it depends on particular versions of the binaries, it should contain a `SuccessfulExit` assertion where version checks should be performed.
 - `description` should not contain distribution-specific instructions for installing depndencies, e.g. "run `apt-get install foo`" is bad, "Install `foo` using you package manager" is good.
 
-# Good advices
+# Recommendations
 
 These are optional, but always good to have.
 
