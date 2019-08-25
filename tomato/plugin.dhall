@@ -126,7 +126,7 @@ let mkIncreaseIntervalSeconds
 		''
 		seconds=${get Seconds}
 		seconds="$(( seconds + ${Natural/show timeInterval} ))"
-		if [[ seconds -lt 60 ]]; then
+		if [ "$seconds" -lt 60 ]; then
 		   ${set Seconds "$seconds"}
 		fi;
 		''
@@ -137,9 +137,9 @@ let tomatoSourceScript =
 	minutes=${get Minutes}
 	seconds=${get Seconds}
 	state=${query AutomatonAddress}
-	if [[ "$state" == ${showState ACTIVE} ]]; then
-		if [[ seconds -eq 0 ]]; then
-			if [[ minutes -eq 0 ]]; then
+	if [ "$state" == ${showState ACTIVE} ]; then
+		if [ "$seconds" -eq 0 ]; then
+			if [ "$minutes" -eq 0 ]; then
 				${emit TimeIsUp};
 			else
 				seconds=59
@@ -152,8 +152,8 @@ let tomatoSourceScript =
 			${set Seconds "$seconds"}
 		fi;
 	fi;
-	if [[ minutes -lt 10 ]]; then minutes="0$minutes"; fi
-	if [[ seconds -lt 10 ]]; then seconds="0$seconds"; fi
+	if [ "$minutes" -lt 10 ]; then minutes="0$minutes"; fi
+	if [ "$seconds" -lt 10 ]; then seconds="0$seconds"; fi
 	echo "$minutes:$seconds"
 	''
 

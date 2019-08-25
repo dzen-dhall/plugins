@@ -19,7 +19,7 @@ set -e -o pipefail
 selected="$1"
 shouldRun="$2"
 
-if [[ "$selected" == "" ]]; then
+if [ "$selected" = "" ]; then
     dirs=`find ./ -type d -regextype posix-extended -regex '^./[a-z0-9-]+$'`;
 else
     dirs="./$selected"
@@ -79,7 +79,7 @@ echo "$dirs" | while read dir; do
     dzen-dhall --config-dir "$configDir" validate
 
     # Run a plugin passed as the first argument.
-    if [[ "$shouldRun" == "run" ]]; then
+    if [ "$shouldRun" = "run" ]; then
         dzen-dhall --config-dir "$configDir"
     fi;
 
@@ -99,8 +99,11 @@ echo "$dirs" | while read dir; do
     # We don't want to require existing readme section during development,
     # however, CI must be able to verify that it exists.
 
-    if [[ "" == `cat ./README.md | grep "## $pluginName"` && "$CI" != "" ]]; then
-        error "No README section found for plugin $pluginName. You should add this plugin to the catalogue."
+    sections=`cat ./README.md | grep "## $pluginName"`
+    if [ -z "$sections" ]; then
+	if  [ -n "$CI" ]; then
+            error "No README section found for plugin $pluginName. You should add this plugin to the catalogue."
+	fi;
     fi;
 
 done;
@@ -120,7 +123,7 @@ $sections
 EOF
 )
 
-if [[ "$sections" != "$sorted" ]]; then
+if [ ! "$sections" = "$sorted" ]; then
     error "$unsortedError";
 fi;
 

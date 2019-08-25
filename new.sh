@@ -8,7 +8,7 @@ function error {
     exit 1
 }
 
-if [[ -z "$pluginName" ]]; then
+if [ -z "$pluginName" ]; then
     error "You should specify plugin name as argument."
 fi;
 
