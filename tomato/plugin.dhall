@@ -2,6 +2,8 @@ let prelude = ../prelude/package.dhall
 let types = ../types/package.dhall
 let utils = ../utils/package.dhall
 
+-- * Types
+
 let AbsolutePosition = types.AbsolutePosition
 let Address = types.Address
 let Assertion = types.Assertion
@@ -10,15 +12,17 @@ let Button = types.Button
 let Carrier = types.Carrier
 let Check = types.Check
 let Color = types.Color
+let Configuration = types.Configuration
 let Direction = types.Direction
-let EscapeMode = types.EscapeMode
 let Event = types.Event
+let Fade = types.Fade
 let Hook = types.Hook
 let Image = types.Image
 let Marquee = types.Marquee
 let Padding = types.Padding
 let Plugin = types.Plugin
 let Position = types.Position
+let Settings = types.Settings
 let Shell = types.Shell
 let Slider = types.Slider
 let Source = types.Source
@@ -28,24 +32,33 @@ let Transition = types.Transition
 let Variable = types.Variable
 let VerticalDirection = types.VerticalDirection
 
+-- * Utility functions
+
+let mkAddress : Text → Address = utils.mkAddress
+let mkEvent : Text → Event = utils.mkEvent
+let mkState : Text → State = utils.mkState
+let mkVariable : Text → Variable = utils.mkVariable
+
 let showAddress : Address → Text = utils.showAddress
-let showButton : Button → Text = utils.showButton
 let showEvent : Event → Text = utils.showEvent
 let showState : State → Text = utils.showState
 let showVariable : Variable → Text = utils.showVariable
 
-let mkAddress : Text → Address = utils.mkAddress
 let mkBashHook : Shell → Hook = utils.mkBashHook
-let mkEvent : Text → Event = utils.mkEvent
-let mkState : Text → State = utils.mkState
+let addHook : Hook → Transition → Transition = utils.addHook
+
+let mkFade : VerticalDirection → Natural → Natural → Fade = utils.mkFade
+let mkSlider : Fade → Fade → Natural → Slider = utils.mkSlider
+let mkMarquee : Natural → Natural → Bool → Marquee = utils.mkMarquee
+
 let mkTransition : Event → State → State → Transition = utils.mkTransition
 let mkTransitions : Event → List State → State → Transition = utils.mkTransitions
-let mkVariable : Text → Variable = utils.mkVariable
 
 let emit : Event → Shell = utils.emit
 let get : Variable → Shell = utils.get
+let getEvent : Shell = utils.getEvent
 let query : Address → Shell = utils.query
-let set : Variable → Text → Shell = utils.set
+let set : Variable → Shell → Shell = utils.set
 
 let INACTIVE : State = mkState ""
 let WAITING : State = mkState "WAITING"
@@ -73,19 +86,18 @@ let bitmap
 	   0xc0, 0x07, 0x00, 0x00, 0x00, 0x00 };
 	  ''
 
-let stt
+let stateTransitionTable
 	: List Transition
 	= [ mkTransition TomatoClicked INACTIVE WAITING
 	  , mkTransition OkClicked WAITING ACTIVE
-	  ,   mkTransition ResetClicked WAITING INACTIVE
-		⫽ { hooks =
-			  [ mkBashHook
-				''
-				${set Minutes "0"}
-				${set Seconds "0"}
-				''
-			  ]
-		  }
+	  , addHook
+		( mkBashHook
+		  ''
+		  ${set Minutes "0"}
+		  ${set Seconds "0"}
+		  ''
+		)
+		(mkTransition ResetClicked WAITING INACTIVE)
 	  , mkTransition TimeIsUp ACTIVE RINGING
 	  , mkTransition TomatoClicked ACTIVE WAITING
 	  , mkTransition TomatoClicked RINGING INACTIVE
@@ -100,7 +112,7 @@ let mkIncreaseIntervalMinutes
 		Button.Left
 		''
 		minutes=${get Minutes}
-		${set Minutes "\$(( minutes + ${Natural/show timeInterval} ))"}
+		${set Minutes "$(( minutes + ${Natural/show timeInterval} ))"}
 		''
 		(cr.text "+${Natural/show timeInterval}m ")
 
@@ -115,35 +127,35 @@ let mkIncreaseIntervalSeconds
 		seconds=${get Seconds}
 		seconds="$(( seconds + ${Natural/show timeInterval} ))"
 		if [[ seconds -lt 60 ]]; then
-		   ${set Seconds "\$seconds"}
+		   ${set Seconds "$seconds"}
 		fi;
 		''
 		(cr.text "+${Natural/show timeInterval}s ")
 
 let tomatoSourceScript =
-	  ''
-	  minutes=${get Minutes}
-	  seconds=${get Seconds}
-	  state=${query AutomatonAddress}
-	  if [[ "$state" == ${showState ACTIVE} ]]; then
+	''
+	minutes=${get Minutes}
+	seconds=${get Seconds}
+	state=${query AutomatonAddress}
+	if [[ "$state" == ${showState ACTIVE} ]]; then
 		if [[ seconds -eq 0 ]]; then
 			if [[ minutes -eq 0 ]]; then
 				${emit TimeIsUp};
 			else
 				seconds=59
-				${set Seconds "\$seconds"}
+				${set Seconds "$seconds"}
 				minutes="$(( minutes - 1 ))"
-				${set Minutes "\$minutes"};
+				${set Minutes "$minutes"};
 			fi;
 		else
 			seconds="$(( seconds - 1 ))"
-			${set Seconds "\$seconds"}
+			${set Seconds "$seconds"}
 		fi;
-	  fi;
-	  if [[ minutes -lt 10 ]]; then minutes="0$minutes"; fi
-	  if [[ seconds -lt 10 ]]; then seconds="0$seconds"; fi
-	  echo "$minutes:$seconds"
-	  ''
+	fi;
+	if [[ minutes -lt 10 ]]; then minutes="0$minutes"; fi
+	if [[ seconds -lt 10 ]]; then seconds="0$seconds"; fi
+	echo "$minutes:$seconds"
+	''
 
 let mkActiveTomato =
 		λ(Bar : Type)
@@ -234,7 +246,7 @@ let mkTomato
 				(emit TomatoClicked)
 				(cr.fg "red" (cr.i bitmap))
 			  , cr.text " "
-			  , cr.automaton AutomatonAddress stt stateMap
+			  , cr.automaton AutomatonAddress stateTransitionTable stateMap
 			  , bell
 			  ]
 			)
@@ -263,7 +275,7 @@ in  { meta =
 			in  plug
 			  ( tomato
 				'''
-				notify-desktop --urgency critical " *** Time is up! *** "
+				notify-send --urgency critical " *** Time is up! *** "
 				'''
 			  )
 			''

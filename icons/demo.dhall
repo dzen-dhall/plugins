@@ -86,4 +86,4 @@ let bar
 			, plug icons.wifi_02
 			]
 
-in  mkConfigs [ { bar = bar, settings = utils.defaultSettings } ]
+in  mkConfigs [ { bar = bar, settings = utils.defaults.settings } ]

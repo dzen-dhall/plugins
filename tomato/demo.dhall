@@ -16,7 +16,7 @@ let Plugin = types.Plugin
 
 let mkConfigs = utils.mkConfigs
 
-let defaultSettings : Settings = utils.defaultSettings
+let defaultSettings : Settings = utils.defaults.settings
 
 let bar
 	: Bar
@@ -29,7 +29,7 @@ let bar
 		in  plug
 			( tomato
 			  ''
-			  notify-desktop --urgency critical " *** Time is up! *** "
+			  notify-send --urgency critical " *** Time is up! *** "
 			  ''
 			)
 

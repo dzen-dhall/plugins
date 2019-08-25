@@ -28,8 +28,7 @@ let main
 					  ""
 				  , updateInterval =
 					  Some 1000
-				  , escapeMode =
-					  { joinLines = False, escapeMarkup = True }
+				  , escape = True
 				  }
 				]
 

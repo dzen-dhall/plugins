@@ -9,7 +9,7 @@ let Configuration = types.Configuration
 let Plugin = types.Plugin
 
 let mkConfigs = utils.mkConfigs
-let defaultSettings : Settings = utils.defaultSettings
+let defaultSettings : Settings = utils.defaults.settings
 
 let bar
 	: Bar

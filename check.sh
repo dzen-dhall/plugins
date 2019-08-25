@@ -106,7 +106,7 @@ echo "$dirs" | while read dir; do
 done;
 
 # Check that ordering of sections in README is correct
-sections=`grep '##' README.md`
+sections=`cat README.md | sed "0,/Catalogue/d" | grep '## [a-z0-9-]\+'`
 sorted=`echo "$sections" | sort`
 unsortedError=$(cat <<EOF
 Catalogue sections in README.md must be sorted.

@@ -2,6 +2,8 @@ let prelude = ../prelude/package.dhall
 let types = ../types/package.dhall
 let utils = ../utils/package.dhall
 
+-- * Types
+
 let AbsolutePosition = types.AbsolutePosition
 let Address = types.Address
 let Assertion = types.Assertion
@@ -11,14 +13,15 @@ let Carrier = types.Carrier
 let Check = types.Check
 let Color = types.Color
 let Direction = types.Direction
-let EscapeMode = types.EscapeMode
 let Event = types.Event
+let Fade = types.Fade
 let Hook = types.Hook
 let Image = types.Image
 let Marquee = types.Marquee
 let Padding = types.Padding
 let Plugin = types.Plugin
 let Position = types.Position
+let Settings = types.Settings
 let Shell = types.Shell
 let Slider = types.Slider
 let Source = types.Source
@@ -28,24 +31,33 @@ let Transition = types.Transition
 let Variable = types.Variable
 let VerticalDirection = types.VerticalDirection
 
+-- * Utility functions
+
+let mkAddress : Text → Address = utils.mkAddress
+let mkEvent : Text → Event = utils.mkEvent
+let mkState : Text → State = utils.mkState
+let mkVariable : Text → Variable = utils.mkVariable
+
 let showAddress : Address → Text = utils.showAddress
-let showButton : Button → Text = utils.showButton
 let showEvent : Event → Text = utils.showEvent
 let showState : State → Text = utils.showState
 let showVariable : Variable → Text = utils.showVariable
 
-let mkAddress : Text → Address = utils.mkAddress
 let mkBashHook : Shell → Hook = utils.mkBashHook
-let mkEvent : Text → Event = utils.mkEvent
-let mkState : Text → State = utils.mkState
+let addHook : Hook → Transition → Transition = utils.addHook
+
+let mkFade : VerticalDirection → Natural → Natural → Fade = utils.mkFade
+let mkSlider : Fade → Fade → Natural → Slider = utils.mkSlider
+let mkMarquee : Natural → Natural → Bool → Marquee = utils.mkMarquee
+
 let mkTransition : Event → State → State → Transition = utils.mkTransition
 let mkTransitions : Event → List State → State → Transition = utils.mkTransitions
-let mkVariable : Text → Variable = utils.mkVariable
 
 let emit : Event → Shell = utils.emit
 let get : Variable → Shell = utils.get
+let getEvent : Shell = utils.getEvent
 let query : Address → Shell = utils.query
-let set : Variable → Text → Shell = utils.set
+let set : Variable → Shell → Shell = utils.set
 
 let bar
 	: Bar
@@ -68,7 +80,7 @@ let bar
 		let co : Natural → Bar = cr.co
 		let p : Position → Bar → Bar = cr.p
 		let pa : AbsolutePosition → Bar → Bar = cr.pa
-		let ca : Button → Text → Bar → Bar = cr.ca
+		let ca : Button → Shell → Bar → Bar = cr.ca
 		let ib : Bar → Bar = cr.ib
 
 		-- Animations:

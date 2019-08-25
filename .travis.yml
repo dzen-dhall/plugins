@@ -1,5 +1,5 @@
 env:
-  - TAG=v0.0.0 PATH=$HOME/:$PATH
+  - TAG=v1.0.0 PATH=$HOME/:$PATH
 
 install:
   - |
