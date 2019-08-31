@@ -1,6 +1,5 @@
 env:
-  - TAG=$(wget -q -O - https://github.com/dzen-dhall/dzen-dhall/releases/latest --server-response --max-redirect 0 2>&1 | sed -n -e 's/.*Location:.*tag\///p')
-  - PATH=$HOME/:$PATH
+  - TAG=$(wget -q -O - https://github.com/dzen-dhall/dzen-dhall/releases/latest --server-response --max-redirect 0 2>&1 | sed -n -e 's/.*Location:.*tag\///p') PATH=$HOME/:$PATH
 
 install:
   - |
