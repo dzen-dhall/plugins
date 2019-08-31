@@ -266,9 +266,13 @@ Run `dzen-dhall plug mpc-simple` to install.
 
 <details><summary><strong>Show usage</strong></summary>
 <p>
+
+```dhall
 let mpc-simple = (./plugins/mpc-simple.dhall)
 
 in	plug (mpc-simple.main mpc-simple.defaults) : Bar
+```
+
 </p>
 </details>
 
