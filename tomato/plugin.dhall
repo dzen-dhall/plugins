@@ -72,8 +72,7 @@ let OkClicked = mkEvent "OkClicked"
 let ResetClicked = mkEvent "ResetClicked"
 let TimeIsUp = mkEvent "TimeIsUp"
 
-let Minutes : Variable = mkVariable "Seconds"
-let Seconds : Variable = mkVariable "Minutes"
+let Seconds : Variable = mkVariable "Seconds"
 
 let bitmap
 	: Image
@@ -93,7 +92,6 @@ let stateTransitionTable
 	  , addHook
 		( mkBashHook
 		  ''
-		  ${set Minutes "0"}
 		  ${set Seconds "0"}
 		  ''
 		)
@@ -111,8 +109,8 @@ let mkIncreaseIntervalMinutes
 	  → cr.ca
 		Button.Left
 		''
-		minutes=${get Minutes}
-		${set Minutes "$(( minutes + ${Natural/show timeInterval} ))"}
+		seconds=${get Seconds}
+		${set Seconds "$(( seconds + 60 * ${Natural/show timeInterval} ))"}
 		''
 		(cr.text "+${Natural/show timeInterval}m ")
 
@@ -126,35 +124,27 @@ let mkIncreaseIntervalSeconds
 		''
 		seconds=${get Seconds}
 		seconds="$(( seconds + ${Natural/show timeInterval} ))"
-		if [ "$seconds" -lt 60 ]; then
-		   ${set Seconds "$seconds"}
-		fi;
+		${set Seconds "$seconds"}
 		''
 		(cr.text "+${Natural/show timeInterval}s ")
 
 let tomatoSourceScript =
 	''
-	minutes=${get Minutes}
 	seconds=${get Seconds}
 	state=${query AutomatonAddress}
 	if [ "$state" == ${showState ACTIVE} ]; then
 		if [ "$seconds" -eq 0 ]; then
-			if [ "$minutes" -eq 0 ]; then
-				${emit TimeIsUp};
-			else
-				seconds=59
-				${set Seconds "$seconds"}
-				minutes="$(( minutes - 1 ))"
-				${set Minutes "$minutes"};
-			fi;
+			${emit TimeIsUp};
 		else
 			seconds="$(( seconds - 1 ))"
 			${set Seconds "$seconds"}
 		fi;
 	fi;
-	if [ "$minutes" -lt 10 ]; then minutes="0$minutes"; fi
-	if [ "$seconds" -lt 10 ]; then seconds="0$seconds"; fi
-	echo "$minutes:$seconds"
+	if [ "$seconds" -lt 3600 ]; then
+		printf "%02d:%02d" "$(( seconds / 60 ))" "$(( seconds % 60 ))"
+	else
+		printf "%02d:%02d:%02d" "$(( seconds / 60 / 60 ))" "$(( seconds / 60 % 60 ))" "$(( seconds % 60 ))"
+	fi;
 	''
 
 let mkActiveTomato =
@@ -239,8 +229,7 @@ let mkTomato
 
 		in  cr.scope
 			( cr.join
-			  [ cr.define Minutes "0"
-			  , cr.define Seconds "0"
+			  [ cr.define Seconds "0"
 			  , cr.ca
 				Button.Left
 				(emit TomatoClicked)
