@@ -282,6 +282,49 @@ in	join
 </p>
 </details>
 
+## mpc
+
+MPD integration using MPC. A higher-order plugin with reasonable defaults.
+
+![mpc](mpc/preview.png)
+
+Text fades out when music is paused.
+
+<details><summary><strong>Show usage</strong></summary>
+<p>
+
+```dhall
+let mpc = (./plugins/mpc.dhall)
+
+in	plug (mpc.main mpc.defaults) : Bar
+```
+
+Settings provide ability to customize appearance in three modes:
+
+- music is playing
+
+- music is paused
+
+- the player is off (no tracks)
+
+Inside three `Bar`s that are accepted by the plugin (one for each mode), some events and variables are available (see [mpc/demo.dhall](mpc/demo.dhall) for usage example):
+
+```dhall
+let Settings
+	: Type
+	= { playing : Bar
+	  , off : Bar
+	  , paused : Bar
+	  , events : { Resume : Event, Pause : Event, TurnOff : Event }
+	  , variables : { Album : Variable, Artist : Variable, Title : Variable }
+	  , updateInterval : Natural
+	  , scoped : Bool
+	  }
+```
+
+</p>
+</details>
+
 ## mpc-simple
 
 A minimal mpd status viewer that uses mpc. Prints artist, title and album.
