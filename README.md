@@ -36,14 +36,14 @@ To be merged into this repo, a plugin must fulfill these requirements:
 - If a plugin emits events, sets variables or contains automata, it should be wrapped in a separate [`scope`](https://github.com/dzen-dhall/dzen-dhall#scopes). [Exceptions exist](#exposing-the-interface).
 - If a plugin calls binaries, it should check if they are present in `PATH` using [assertions](https://github.com/dzen-dhall/dzen-dhall#assertions). If it depends on particular versions of the binaries, it should contain a `SuccessfulExit` assertion where version checks should be performed.
 - Plugin directory should contain a `demo.dhall` file with a complete configuration that uses the newly created plugin as described in its `usage` section.
-- A new entry to the [catalogue](#catalogue) should be added.
+- A new entry to the [catalogue](#catalogue) should be added (preserving alphabetic ordering).
 
 # Recommendations
 
 These are optional, but always good to have.
 
 - A plugin should be fixed-width, i.e. occupy the same area on the screen during runtime. Use [trimming](https://github.com/dzen-dhall/dzen-dhall#trimming-text) and [padding](https://github.com/dzen-dhall/dzen-dhall#padding-text) functions to achieve this.
-- Put a `preview.png` of your plugin in its folder (if applicable), and add a new entry to the list below (preserving alphabetic ordering).
+- Put a `preview.png` of your plugin in its folder (if applicable).
 
 # Advanced plugin development
 
@@ -64,6 +64,38 @@ Obviously, you shouldn't wrap your plugin in a separate `scope` when doing so. T
 # Catalogue
 
 A list of all available plugins.
+
+## amixer-volume
+
+Prints current volume. The output becomes red when the volume is off.
+
+Run `dzen-dhall plug amixer-volume` to install.
+
+<details><summary><strong>Show usage</strong></summary>
+<p>
+
+```dhall
+let amixer-volume = (./plugins/amixer-volume.dhall)
+
+in  plug (amixer-volume.main amixer-volume.defaults) : Bar
+```
+
+Settings:
+
+```dhall
+let Settings
+	: Type
+	= { device : Text -- `-D` flag (amixer)
+	  , card : Optional Text -- `-c` flag (amixer)
+	  , onColor : Color
+	  , offColor : Color
+	  , scoped : Bool -- whether to wrap the plugin into a separate scope.
+	  , updateInterval : Natural
+	  }
+```
+
+</p>
+</details>
 
 ## date
 
