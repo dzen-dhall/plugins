@@ -1,8 +1,7 @@
-env:
-  - TAG=$(wget -q -O - https://github.com/dzen-dhall/dzen-dhall/releases/latest --server-response --max-redirect 0 2>&1 | sed -n -e 's/.*Location:.*tag\///p') PATH=$HOME/:$PATH
-
 install:
   - |
+    export TAG="$(curl -H "Authorization: token $GITHUB_API_TOKEN" --silent "https://api.github.com/repos/dzen-dhall/dzen-dhall/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
+    export PATH="$HOME/:$PATH"
     wget -O $HOME/dzen-dhall.tar.gz https://github.com/dzen-dhall/dzen-dhall/releases/download/$TAG/linux.tar.gz
     tar -xvf $HOME/dzen-dhall.tar.gz -C $HOME/
     chmod a+x $HOME/dzen-dhall
